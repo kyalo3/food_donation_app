@@ -1,11 +1,24 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from flask_pymongo import PyMongo
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
+app.config['MAIL_SERVER'] = 'smtp.example.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'kyalokimeu0@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Alcatraz12!'
 app.config["MONGO_URI"] = "mongodb://localhost:27017/mydatabase"  # Replace with your MongoDB URI
 client = MongoClient('mongodb://localhost:27017/')
 db = client['food_donation']  # Specify the name of your database
+users_collection = db['users'] # Specify the name of the collection
+mail = Mail(app)
+
+
+@app.route('/')
+def index():
+    return 'Welcome to the Food Donation Platform!'
 
 
 """Authentication and Authorization Endpoints"""
@@ -38,6 +51,11 @@ def register():
 
     """ Insert new user document into the database"""
     users_collection.insert_one(new_user)
+
+    """ Send email to the registered user """
+    msg = Message('Welcome to Food Donation Platform', recipients=[data['email']])
+    msg.body = 'Thank you for registering with Food Donation Platform!'
+    mail.send(msg)
 
     return jsonify({'message': 'User registered successfully'}), 201
 
