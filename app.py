@@ -10,9 +10,13 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'kyalokimeu0@gmail.com'
 app.config['MAIL_PASSWORD'] = 'Alcatraz12!'
 app.config["MONGO_URI"] = "mongodb://localhost:27017/mydatabase"  # Replace with your MongoDB URI
-client = MongoClient('mongodb://localhost:27017/')
-db = client['food_donation']  # Specify the name of your database
+
+mongo_client = MongoClient('mongodb+srv://root_brian:ASdh25NQFaFfqE65@clusterfoodhackathon.y7ojbmg.mongodb.net/?retryWrites=true&w=majority&appName=ClusterFoodHackathon')
+
+db = mongo_client.get_database('food_donation_db')  # Specify the name of your database
+
 users_collection = db['users'] # Specify the name of the collection
+
 mail = Mail(app)
 
 
