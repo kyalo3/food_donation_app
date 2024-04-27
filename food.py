@@ -1,4 +1,6 @@
 from flask import Flask
+from pymongo import MongoClient
+from flask import request, jsonify
 from flask_pymongo import PyMongo
 
 app = Flask(__name__)
@@ -9,22 +11,24 @@ db = client['food_donation']  # Specify the name of your database
 
 
 """Authentication and Authorization Endpoints"""
+
+
 @app.route('/api/auth/register', methods=['POST'])
 def register():
-    # Get registration data from request body
+    """Get registration data from request body"""
     data = request.json
-    
-    # Check if required fields are present in the request
+
+    """ Check if required fields are present in the request"""
     required_fields = ['username', 'password', 'email']
     if not all(field in data for field in required_fields):
         return jsonify({'error': 'Missing required fields'}), 400
-    
-    # Check if username or email already exists in the database
+
+    """ Check if username or email already exists in the database"""
     existing_user = users_collection.find_one({'$or': [{'username': data['username']}, {'email': data['email']}]})
     if existing_user:
         return jsonify({'error': 'Username or email already exists'}), 409
-    
-    # Create new user document
+
+    """ Create new user document"""
     new_user = {
         'username': data['username'],
         'password': data['password'],  # In practice, hash the password before storing it
@@ -33,29 +37,29 @@ def register():
         'profile': {},  # Additional profile information can be added here
         'history': []  # Initialize empty history
     }
-    
-    # Insert new user document into the database
+
+    """ Insert new user document into the database"""
     users_collection.insert_one(new_user)
-    
+
     return jsonify({'message': 'User registered successfully'}), 201
-    
+
 
 @app.route('/api/auth/login', methods=['POST'])
 def login():
     """ Implement user login logic"""
     data = request.json
-    
-    # Check if required fields are present in the request
+
+    """ Check if required fields are present in the request"""
     required_fields = ['username', 'password']
     if not all(field in data for field in required_fields):
         return jsonify({'error': 'Missing required fields'}), 400
-    
-    # Check if user with given username exists in the database
+
+    """ Check if user with given username exists in the database"""
     user = users_collection.find_one({'username': data['username']})
     if user:
-        # Check if password matches the stored password
+        """ Check if password matches the stored password"""
         if user['password'] == data['password']:  # In practice, compare hashed passwords
-            # Return success message and user data
+            """ Return success message and user data"""
             response_data = {
                 'message': 'User login successful',
                 'user': {
@@ -78,69 +82,84 @@ def logout():
     """ Implement user logout logic"""
     return jsonify({'message': 'User logout endpoint'})
 
+
+""" Current User Profile Endpoint"""
+
+
 @app.route('/api/auth/me', methods=['GET'])
 def me():
     """ Implement current user profile fetching logic"""
-    # Get the authentication token from the request headers
+    """ Get the authentication token from the request headers"""
     token = request.headers.get('Authorization')
 
-    # Authenticate the user using the token
+    """ Authenticate the user using the token"""
     user = authenticate(token)
 
     if user:
-        # Return the user's profile information if authenticated
+        """ Return the user's profile information if authenticated"""
         return jsonify(user)
     else:
-        # Return an error message if authentication fails
+        """ Return an error message if authentication fails"""
         return jsonify({'error': 'Authentication failed'}), 401
     return jsonify({'message': 'Current user profile endpoint'})
 
 
 """ Donors Endpoints"""
+
+
 @app.route('/api/donors', methods=['GET'])
 def get_donors():
-    # Implement fetching all donors logic
+    """ Implement fetching all donors logic"""
     return jsonify({'message': 'Get all donors endpoint'})
+
 
 @app.route('/api/donors/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def donor(id):
-    # Implement logic for specific donor profile (GET, PUT, DELETE)
+    """ Implement logic for specific donor profile (GET, PUT, DELETE)"""
     return jsonify({'message': f'Donor {id} endpoint'})
+
 
 @app.route('/api/donors/<int:id>/donations', methods=['GET'])
 def get_donations_by_donor(id):
-    # Implement fetching donations by a specific donor logic
+    """ Implement fetching donations by a specific donor logic"""
     return jsonify({'message': f'Donations by donor {id} endpoint'})
+
 
 @app.route('/api/donations', methods=['POST'])
 def create_donation():
-    # Implement logic for creating a new donation listing
+    """ Implement logic for creating a new donation listing"""
     return jsonify({'message': 'Create donation endpoint'})
+
 
 @app.route('/api/donations/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def donation(id):
-    # Implement logic for specific donation listing (GET, PUT, DELETE)
+    """ Implement logic for specific donation listing (GET, PUT, DELETE)"""
     return jsonify({'message': f'Donation {id} endpoint'})
 
+
 """ Recipients Endpoints"""
-# Implement recipient endpoints similarly to donors endpoints
+""" Implement recipient endpoints similarly to donors endpoints"""
 
 """ Admins Endpoints"""
 """ Implement admin endpoints similarly to donors endpoints"""
 
 """ Communication Endpoints"""
-# Implement communication endpoints similarly to donors endpoints
+""" Implement communication endpoints similarly to donors endpoints"""
 
 """Additional Endpoints"""
+
+
 @app.route('/api/search', methods=['GET'])
 def search():
-    # Implement search for donation listings based on various criteria
+    """ Implement search for donation listings based on various criteria"""
     return jsonify({'message': 'Search donation listings endpoint'})
+
 
 @app.route('/api/history', methods=['GET'])
 def history():
-    # Implement fetch donation history for donors and recipients
+    """ Implement fetch donation history for donors and recipients"""
     return jsonify({'message': 'Fetch donation history endpoint'})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
