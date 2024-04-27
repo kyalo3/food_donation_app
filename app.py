@@ -1,11 +1,9 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from pymongo import MongoClient
-from flask import request, jsonify
 from flask_pymongo import PyMongo
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/mydatabase"  # Replace with your MongoDB URI
-mongo = PyMongo(app)
 client = MongoClient('mongodb://localhost:27017/')
 db = client['food_donation']  # Specify the name of your database
 
