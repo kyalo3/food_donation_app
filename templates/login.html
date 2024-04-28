@@ -25,7 +25,8 @@
         }
         input[type="text"],
         input[type="password"],
-        input[type="submit"] {
+        input[type="submit"],
+        select {
             width: 100%;
             padding: 10px;
             margin-top: 10px;
@@ -46,3 +47,47 @@
     </style>
 </head>
 <body>
+    <div class="container">
+        <h2>Login</h2>
+        <form id="login-form">
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <select id="role" name="role">
+                <option value="admin">Login as Admin</option>
+                <option value="donor">Login as Donor</option>
+                <option value="recipient">Login as Recipient</option>
+            </select>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            var formData = new FormData(this);
+
+            fetch('/api/auth/login', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle response from the backend
+                console.log(data);
+                // Redirect to appropriate dashboard based on role
+                if (data.user.role === 'admin') {
+                    window.location.href = '/admin_dashboard';
+                } else if (data.user.role === 'donor') {
+                    window.location.href = '/donor_dashboard';
+                } else if (data.user.role === 'recipient') {
+                    window.location.href = '/recipient_dashboard';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
