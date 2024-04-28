@@ -12,26 +12,46 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            align-items: center; /* Center content horizontally */
         }
         header {
             background-color: #f2f2f2;
-            padding: 20px 0;
+            padding: 20px 20px 0;
+            text-align: left; /* Align text to left */
         }
         .container {
             max-width: 1200px;
             margin: auto;
-            padding: 0 20px;
+            padding: 0;
         }
         .hero, .how-it-works, footer {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            text-align: center;
+            text-align: left; /* Align text to left */
         }
         footer {
             background-color: #f2f2f2;
             padding: 20px 0;
+            text-align: center; /* Align text to center */
+        }
+        .how-it-works .container {
+            padding: 0 20px; /* Add padding to the container */
+        }
+        .hero .container {
+            padding: 0 20px; /* Add padding to the container */
+            text-align: center; /* Align text to center */
+        }
+        .hero h1 {
+            text-align: left; /* Align text to left */
+        }
+        .steps {
+            display: flex;
+            justify-content: flex-start; /* Align steps to the left */
+        }
+        .step {
+            margin-right: 20px; /* Add spacing between steps */
         }
     </style>
 </head>
@@ -41,7 +61,7 @@
             <h1>Empower Wave</h1>
             <nav>
                 <ul>
-                    <li><a href="signup.html">Sign Up</a></li>
+                    <li><a href="sign_up.html">Sign Up</a></li>
                     <li><a href="login.html">Login</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
                     <li><a href="about.html">About Us</a></li>
