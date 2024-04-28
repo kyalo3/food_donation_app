@@ -15,7 +15,7 @@ mongo_client = MongoClient('mongodb+srv://root_brian:ASdh25NQFaFfqE65@clusterfoo
 
 db = mongo_client.get_database('food_donation_db')  # Specify the name of your database
 
-users_collection = db['users'] # Specify the name of the collection
+users_collection = db['users']  """Specify the name of the collection"""
 
 mail = Mail(app)
 
@@ -26,8 +26,8 @@ def index():
 
 
 @app.route('/signup')
-def signup():
-    return render_template('signup.html')
+def sign_up():
+    return render_template('sign_up.html')
 
 
 @app.route('/login')
@@ -44,9 +44,20 @@ def about():
 def contact():
     return render_template('contact.html')
 
-@app.route('/admindashboard')
+
+@app.route('/admin_dashboard')
 def admin_dashboard():
     return render_template('admin_dashboard.html')
+
+
+@app.route('/donor_dashboard')
+def donor_dahsboard():
+    return render_template('donor_dashboard.hmtl')
+
+
+@app.route('/recipient_dashboard')
+def recipient_dashboard():
+    return render_template('recipient_dashboard.html')
 
 
 """Authentication and Authorization Endpoints"""
