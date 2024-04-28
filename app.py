@@ -25,6 +25,30 @@ def index():
     return 'Welcome to the Food Donation Platform!'
 
 
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
+
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+@app.route('/admindashboard')
+def admin_dashboard():
+    return render_template('admin_dashboard.html')
+
+
 """Authentication and Authorization Endpoints"""
 
 
